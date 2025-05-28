@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Penilaian - Sistem SAW Karyawan{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Edit Penilaian</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('edit_penilaian', karyawan_id=karyawan.id) }}" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Karyawan</label>
+                            <input type="text" class="form-control" value="{{ karyawan.nama }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kriteria_id" class="form-label">Kriteria</label>
+                            <select class="form-select" id="kriteria_id" name="kriteria_id" required>
+                                <option value="">Pilih Kriteria</option>
+                                {% for kriteria in kriteria_list %}
+                                <option value="{{ kriteria.id }}" 
+                                        {% if kriteria.id in nilai_dict %}selected{% endif %}>
+                                    {{ kriteria.nama }} (Bobot: {{ "%.2f"|format(kriteria.bobot) }} | 
+                                    Jenis: {{ kriteria.jenis }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nilai" class="form-label">Nilai (1-100)</label>
+                            <input type="number" class="form-control" id="nilai" name="nilai" 
+                                   min="1" max="100" 
+                                   value="{{ nilai_dict.values()|first if nilai_dict else '' }}"
+                                   required>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <a href="{{ url_for('penilaian') }}" class="btn btn-secondary">Kembali</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

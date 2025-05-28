@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Hasil Evaluasi - Sistem SAW Karyawan{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Hasil Evaluasi Kinerja Karyawan</h5>
+        <button onclick="window.print()" class="btn btn-primary">
+            <i class="fas fa-print me-2"></i>Cetak Laporan
+        </button>
+    </div>
+    <div class="card-body">
+        {% if hasil_saw %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Peringkat</th>
+                            <th>Nama Karyawan</th>
+                            {% for kriteria in hasil_saw[0].nilai.keys() %}
+                            <th>{{ kriteria }}</th>
+                            {% endfor %}
+                            <th>Total Skor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for hasil in hasil_saw %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ hasil.karyawan.nama }}</td>
+                            {% for nilai in hasil.nilai.values() %}
+                            <td>{{ "%.4f"|format(nilai) }}</td>
+                            {% endfor %}
+                            <td><strong>{{ "%.4f"|format(hasil.total_score) }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-info mt-4">
+                <h5 class="alert-heading">Keterangan Perhitungan:</h5>
+                <p class="mb-0">
+                    1. Normalisasi Nilai:<br>
+                    - Kriteria Benefit: nilai / nilai maksimum<br>
+                    - Kriteria Cost: nilai minimum / nilai<br><br>
+                    2. Total Skor = Σ(nilai normalisasi × bobot kriteria)<br><br>
+                    3. Bobot Kriteria:<br>
+                    - Kedisiplinan: 0.35<br>
+                    - Kualitas Kerja: 0.35<br>
+                    - Kuantitas Kerja: 0.30<br><br>
+                    4. Karyawan dengan total skor tertinggi adalah yang terbaik
+                </p>
+            </div>
+        {% else %}
+            <div class="alert alert-warning">
+                <h5 class="alert-heading">Belum Ada Data Penilaian</h5>
+                <p class="mb-0">
+                    Untuk melihat hasil evaluasi, silakan lakukan penilaian terlebih dahulu di menu Penilaian.
+                    Pastikan semua karyawan telah dinilai untuk semua kriteria.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    @media print {
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-size: 10pt;
+        }
+        
+        .navbar, .btn, .alert {
+            display: none !important;
+        }
+        
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        
+        .card-header {
+            background: none !important;
+            border: none !important;
+            padding: 0 !important;
+            text-align: center !important;
+            margin-bottom: 1cm !important;
+        }
+        
+        .card-header h5 {
+            font-size: 14pt !important;
+            font-weight: bold !important;
+        }
+        
+        .card-body {
+            padding: 0 !important;
+        }
+        
+        .table {
+            width: 100% !important;
+            margin-bottom: 1rem !important;
+            font-size: 9pt !important;
+        }
+        
+        .table th, .table td {
+            padding: 0.3rem !important;
+            border: 1px solid #000 !important;
+        }
+        
+        .table thead th {
+            background-color: #f8f9fa !important;
+            border-bottom: 2px solid #000 !important;
+            font-weight: bold !important;
+        }
+        
+        .alert-info {
+            border: 1px solid #000 !important;
+            background-color: #fff !important;
+            color: #000 !important;
+            margin-top: 1rem !important;
+            padding: 0.5rem !important;
+            font-size: 9pt !important;
+        }
+        
+        .alert-info h5 {
+            margin-bottom: 0.5rem !important;
+            font-size: 10pt !important;
+            font-weight: bold !important;
+        }
+        
+        .alert-info p {
+            margin-bottom: 0 !important;
+        }
+    }
+</style>
+{% endblock %} 

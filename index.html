@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Sistem SAW Karyawan{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Selamat Datang di Sistem Penilaian Kinerja Karyawan</h2>
+                <p class="card-text">Sistem ini menggunakan metode SAW (Simple Additive Weighting) untuk mengevaluasi kinerja karyawan.</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-users me-2"></i>Total Karyawan</h5>
+                                <h2 class="card-text">{{ total_karyawan }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-list-check me-2"></i>Total Kriteria</h5>
+                                <h2 class="card-text">{{ total_kriteria }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-chart-bar me-2"></i>Penilaian</h5>
+                                <h2 class="card-text">{{ total_nilai }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

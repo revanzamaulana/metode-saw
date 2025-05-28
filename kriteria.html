@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Kriteria - Sistem SAW Karyawan{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Daftar Kriteria</h2>
+        <a href="{{ url_for('tambah_kriteria') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tambah Kriteria
+        </a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Kriteria</th>
+                            <th>Bobot</th>
+                            <th>Jenis</th>
+                            <th>Tanggal Ditambahkan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for kriteria in kriteria_list %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ kriteria.nama }}</td>
+                            <td>{{ "%.2f"|format(kriteria.bobot) }}</td>
+                            <td>
+                                <span class="badge {% if kriteria.jenis == 'benefit' %}bg-success{% else %}bg-danger{% endif %}">
+                                    {{ kriteria.jenis }}
+                                </span>
+                            </td>
+                            <td>{{ kriteria.created_at.strftime('%d-%m-%Y %H:%M') }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('edit_kriteria', id=kriteria.id) }}" 
+                                       class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="{{ url_for('hapus_kriteria', id=kriteria.id) }}" 
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Apakah Anda yakin ingin menghapus kriteria ini?')">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

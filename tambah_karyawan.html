@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Tambah Karyawan - Sistem SAW Karyawan{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Tambah Karyawan Baru</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="nama" class="form-label">Nama Karyawan</label>
+                <input type="text" class="form-control" id="nama" name="nama" required>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>Simpan
+                </button>
+                <a href="{{ url_for('karyawan') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Kembali
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

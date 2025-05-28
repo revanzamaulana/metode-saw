@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block title %}Penilaian - Sistem SAW Karyawan{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Penilaian Karyawan</h2>
+        <a href="{{ url_for('hasil') }}" class="btn btn-success">
+            <i class="fas fa-chart-bar"></i> Lihat Hasil
+        </a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Tambah Penilaian</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('tambah_penilaian') }}" method="POST">
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <label for="karyawan_id" class="form-label">Karyawan</label>
+                                <select class="form-select" id="karyawan_id" name="karyawan_id" required>
+                                    <option value="">Pilih Karyawan</option>
+                                    {% for karyawan in karyawan_list %}
+                                    <option value="{{ karyawan.id }}">{{ karyawan.nama }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="kriteria1" class="form-label">Kriteria 1</label>
+                                    <select class="form-select" id="kriteria1" name="kriteria1" required>
+                                        <option value="">Pilih Kriteria</option>
+                                        {% for kriteria in kriteria_list %}
+                                        <option value="{{ kriteria.id }}">
+                                            {{ kriteria.nama }} (Bobot: {{ "%.2f"|format(kriteria.bobot) }})
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    <input type="number" class="form-control mt-2" 
+                                           name="nilai1" min="1" max="100" 
+                                           placeholder="Nilai 1-100" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="kriteria2" class="form-label">Kriteria 2</label>
+                                    <select class="form-select" id="kriteria2" name="kriteria2" required>
+                                        <option value="">Pilih Kriteria</option>
+                                        {% for kriteria in kriteria_list %}
+                                        <option value="{{ kriteria.id }}">
+                                            {{ kriteria.nama }} (Bobot: {{ "%.2f"|format(kriteria.bobot) }})
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    <input type="number" class="form-control mt-2" 
+                                           name="nilai2" min="1" max="100" 
+                                           placeholder="Nilai 1-100" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="kriteria3" class="form-label">Kriteria 3</label>
+                                    <select class="form-select" id="kriteria3" name="kriteria3" required>
+                                        <option value="">Pilih Kriteria</option>
+                                        {% for kriteria in kriteria_list %}
+                                        <option value="{{ kriteria.id }}">
+                                            {{ kriteria.nama }} (Bobot: {{ "%.2f"|format(kriteria.bobot) }})
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    <input type="number" class="form-control mt-2" 
+                                           name="nilai3" min="1" max="100" 
+                                           placeholder="Nilai 1-100" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">tabel normalisasi</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Karyawan</th>
+                                    <th>Kriteria 1</th>
+                                    <th>Nilai 1</th>
+                                    <th>Kriteria 2</th>
+                                    <th>Nilai 2</th>
+                                    <th>Kriteria 3</th>
+                                    <th>Nilai 3</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for karyawan in karyawan_list %}
+                                {% set nilai_list = nilai_per_karyawan.get(karyawan.id, []) %}
+                                {% if nilai_list|length == 3 %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ karyawan.nama }}</td>
+                                    {% for nilai in nilai_list %}
+                                    <td>{{ nilai.kriteria.nama }}</td>
+                                    <td>{{ nilai.nilai }}</td>
+                                    {% endfor %}
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url_for('edit_penilaian', karyawan_id=karyawan.id) }}" 
+                                               class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            <a href="{{ url_for('hapus_penilaian', karyawan_id=karyawan.id) }}" 
+                                               class="btn btn-danger btn-sm"
+                                               onclick="return confirm('Apakah Anda yakin ingin menghapus penilaian ini?')">
+                                                <i class="fas fa-trash"></i> Hapus
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const kriteriaSelects = document.querySelectorAll('select[id^="kriteria"]');
+    
+    function updateKriteriaOptions() {
+        // Reset all options first
+        kriteriaSelects.forEach(select => {
+            Array.from(select.options).forEach(option => {
+                option.disabled = false;
+            });
+        });
+
+        // Disable selected options in other selects
+        kriteriaSelects.forEach(select => {
+            if (select.value) {
+                kriteriaSelects.forEach(otherSelect => {
+                    if (otherSelect !== select) {
+                        Array.from(otherSelect.options).forEach(option => {
+                            if (option.value === select.value) {
+                                option.disabled = true;
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    // Add change event listener to each select
+    kriteriaSelects.forEach(select => {
+        select.addEventListener('change', updateKriteriaOptions);
+    });
+
+    // Initial update
+    updateKriteriaOptions();
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Tambah Kriteria - Sistem SAW Karyawan{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Tambah Kriteria Baru</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="nama" class="form-label">Nama Kriteria</label>
+                <input type="text" class="form-control" id="nama" name="nama" required>
+            </div>
+            <div class="mb-3">
+                <label for="bobot" class="form-label">Bobot (0-1)</label>
+                <input type="number" class="form-control" id="bobot" name="bobot" step="0.01" min="0" max="1" required>
+                <div class="form-text">Masukkan nilai antara 0 dan 1</div>
+            </div>
+            <div class="mb-3">
+                <label for="jenis" class="form-label">Jenis Kriteria</label>
+                <select class="form-select" id="jenis" name="jenis" required>
+                    <option value="benefit">Benefit (Semakin besar semakin baik)</option>
+                    <option value="cost">Cost (Semakin kecil semakin baik)</option>
+                </select>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>Simpan
+                </button>
+                <a href="{{ url_for('kriteria') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Kembali
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 
